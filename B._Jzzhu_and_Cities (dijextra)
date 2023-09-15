@@ -1,0 +1,82 @@
+/******************************************************/
+/******************************************************/
+/**            BISMILLAHIR RAHMANIR RAHIM            **/
+/**         Md.Faysal Ahamed - ER3N YAGER            **/
+/**  Department of Computer Science and Engineering  **/
+/**               Barisal University                 **/
+/**               It's time to Roar.                 **/
+/******************************************************/
+/******************************************************/
+#include<bits/stdc++.h>
+using namespace std;
+#define ll   long long
+#define pb   push_back
+#define yes   cout<<"YES"<<endl
+#define no   cout<<"NO"<<endl
+#define all(x) (x).begin(), (x).end()
+#define    gcd(a,b)      __gcd(a,b)
+#define    lcm(a,b)  (a*b)/__gcd(a,b)
+#define optimize() ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+
+const ll mx=1e5+123; 
+ll dist[mx];
+vector<vector<ll>>adj[mx];
+bool train[mx];
+
+void dijextra(ll s, ll n ){
+
+    for(ll i=1; i<=n; i++)dist[i]=1e18; 
+    dist[s]=0; 
+    priority_queue<pair<ll,ll>, vector<pair<ll,ll>>, greater<pair<ll,ll>>>pq; 
+    pq.push({ 0, s});
+    while(!pq.empty())
+    {
+        ll u=pq.top().second; 
+        ll curD=pq.top().first; 
+        pq.pop();
+        if(dist[u]<curD)continue; 
+        for(auto e: adj[u])
+        {
+            ll v=e[0];
+            ll w=e[1];
+            ll type=e[2];
+
+            if(curD+w <dist[v])
+            {
+                dist[v]=curD+w; 
+                train[v]=type; 
+                pq.push({ dist[v], v});
+            }
+            else if( curD+w ==dist[v] && train[v]==1 && type==0)
+            {
+                train[v]=0; 
+            }
+
+        }
+    }
+    
+}
+
+int main()
+{
+    optimize();
+   ll n,m,k; cin>>n>>m>>k; 
+   for(ll i=1; i<=m; i++)
+   {
+        ll u,v,w; cin>>u>>v>>w; 
+        adj[u].pb({ v, w, 0});
+        adj[v].pb({ u, w, 0});
+   }
+   for(ll i=1; i<=k; i++)
+   {
+    ll u,w; 
+    cin>>u>>w; 
+    adj[1].pb({ u, w, 1});
+    adj[u].pb( { 1, w, 1});
+   }
+   dijextra( 1 , n);
+   ll ans=0; 
+   for(ll i=1; i<=n; i++)ans+=train[i];
+   cout<<k-ans<<endl;
+}
+/*****************  ALHAMDULILLAH  *****************/
