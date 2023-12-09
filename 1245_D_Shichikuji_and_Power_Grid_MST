@@ -1,0 +1,102 @@
+/******************************************************/
+/******************************************************/
+/**            BISMILLAHIR RAHMANIR RAHIM            **/
+/**         Md.Faysal Ahamed - ER3N YAGER            **/
+/**  Department of Computer Science and Engineering  **/
+/**               Barisal University                 **/
+/**               It's time to Roar.                 **/
+/******************************************************/
+/******************************************************/
+#include<bits/stdc++.h>
+using namespace std;
+#define ll   long long
+#define pb   push_back
+#define yes   cout<<"YES"<<endl
+#define no   cout<<"NO"<<endl
+#define all(x) (x).begin(), (x).end()
+#define    gcd(a,b)      __gcd(a,b)
+#define    lcm(a,b)  (a*b)/__gcd(a,b)
+#define optimize() ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+
+ vector<ll> par;
+    vector<ll> sz;
+    
+    int find_par ( ll u ) {
+        if ( u == par[u] ) return u;
+        return par[u] = find_par ( par[u] );
+    }
+    
+    void Union ( ll u, ll v ) {
+        if ( sz[u] < sz[v] ) swap ( u, v );
+        par[v] = u;
+        sz[u] += sz[v];
+    }
+
+
+void solve(){
+    ll n; 
+    cin>>n; 
+     par.clear();
+        sz.clear();
+        
+         par.resize( n+1 );
+        sz.resize( n+1 );
+        for(ll i=1; i<=n; i++)par[i]=i;
+
+    vector<pair<ll,ll>>cities( n+1) ;
+    for(ll i=1; i<=n; i++)cin>>cities[i].first>>cities[i].second;
+      vector<ll>cost(n+1),value(n+1);
+      for(ll i=1; i<=n; i++)cin>>cost[i];
+      for(ll i=1; i<=n; i++)cin>>value[i];
+      vector<pair<ll,pair<ll,ll>>>edge; 
+      for(ll i=1; i<=n; i++)edge.pb( { cost[i] , { i , 0}});
+      for(ll i=1; i<=n; i++)
+      {
+        for(ll j=i+1; j<=n; j++)
+        {
+            ll dist=abs(cities[i].first-cities[j].first)+abs(cities[i].second-cities[j].second);
+        ll cst=dist*(value[i]+value[j]);
+        edge.pb({cst,{i,j}});
+        }
+      }
+      sort(all(edge));
+      vector<ll>power; 
+      vector<pair<ll,ll>>vp; 
+        ll ans=0, ans2=0,cnt=0, cnt2=0; 
+        for(auto e:edge)
+        {
+            int u=find_par(e.second.first); 
+            int v=find_par(e.second.second);
+            int w=e.first; 
+            if( u!=v)
+            {
+                Union( u, v);
+                ans+=w; 
+                cnt++; 
+                if(e.second.first==0 || e.second.second==0 )power.pb(max(e.second.first,e.second.second));
+                else vp.pb({e.second.first,e.second.second});
+                if(cnt==n)break; 
+            }
+        }
+        cout<<ans<<endl;
+        cout<<power.size()<<endl;
+        for(auto u: power)cout<<u<<" ";
+         cout<<endl;
+        cout<<vp.size()<<endl;
+        for(auto u:vp)cout<<u.first<<" "<<u.second<<endl;
+         cout<<endl;
+
+
+
+
+
+}
+
+int main()
+{
+    optimize();
+    
+        solve();
+    
+}
+/*****************  ALHAMDULILLAH  *****************/
